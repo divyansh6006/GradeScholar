@@ -6,7 +6,10 @@ import { universities } from "../src/data/universities";
 import { programs } from "../src/data/programs";
 import { blogPosts } from "../src/data/blog";
 
-const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL ?? "file:./dev.db" });
+const adapter = new PrismaLibSql({
+  url: process.env.DATABASE_URL ?? "file:./dev.db",
+  authToken: process.env.DATABASE_AUTH_TOKEN,
+});
 const db = new PrismaClient({ adapter });
 
 async function main() {

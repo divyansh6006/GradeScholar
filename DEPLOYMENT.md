@@ -1,153 +1,127 @@
-# Deploying to Hostinger (Node.js app hosting) + Cloudflare
+# Deploying to Hostinger (Git-connected Node.js hosting) + Cloudflare
 
-This app is a Next.js 16 site with API routes, auth middleware, and a SQLite
-database (via Prisma + libsql). It needs a persistent Node.js process — it
-will not run on plain PHP/static shared hosting. This guide assumes your
-Hostinger plan has the **Node.js** section in hPanel (Passenger-based).
+This app is a Next.js 16 site with API routes, auth middleware, and a
+database (Prisma + libsql). Hostinger's Node.js hosting here deploys by
+rebuilding from your GitHub repo on every push — which means **the
+filesystem is not persistent between deploys**. Anything written to disk at
+runtime (a local SQLite file, uploaded logo images) is wiped the next time
+you push. The database therefore lives on **Turso** (a hosted SQLite
+service using the same libsql protocol this app already speaks — no code
+rewrite needed) instead of a local file.
 
-I cannot access your Hostinger or Cloudflare accounts directly, so you'll
-need to carry out the panel steps yourself — this doc is the exact runbook.
-
----
-
-## 0. One-time check
-
-In hPanel → **Advanced → Node.js**, confirm the available Node version is
-**20.9 or newer** (this app requires it). If only older versions are
-offered, this deployment path won't work and you'd need a VPS instead.
+I don't have access to your Hostinger, Turso, or Cloudflare accounts, so
+this is the exact runbook for you to follow.
 
 ---
 
-## 1. Get the code onto the server
+## 1. Create a Turso database (one-time)
 
-You don't have a git repo for this project yet, so the simplest path is a
-zip upload:
-
-1. On your machine, zip the project **excluding** `node_modules`, `.next`,
-   and `.env` (these should never be uploaded — `node_modules` gets
-   reinstalled on the server, `.env` holds secrets you'll create fresh).
-2. In hPanel → **Files → File Manager**, upload the zip into your Node app's
-   folder (hPanel shows you this path when you create the Node.js app in
-   step 2) and extract it there.
-
-If you'd rather use Git (e.g. you push this to GitHub first), Hostinger's
-Node.js app screen also supports pulling from a repository — either works;
-the rest of this guide is the same either way.
+1. Sign up at [turso.tech](https://turso.tech) (free tier is enough).
+2. Create a database (via their dashboard, or the `turso` CLI if you have
+   it installed: `turso db create gradscholar`).
+3. Get the connection URL and an auth token:
+   - Dashboard: the database page shows a `libsql://...` URL and lets you
+     generate a token.
+   - CLI: `turso db show gradscholar --url` and `turso db tokens create gradscholar`.
+4. Combine them into one connection string:
+   ```
+   libsql://your-db-name-yourorg.turso.io?authToken=PASTE_TOKEN_HERE
+   ```
 
 ---
 
-## 2. Create the Node.js app in hPanel
+## 2. Migrate and seed the Turso database
 
-1. hPanel → **Advanced → Node.js → Create Application**.
-2. **Node.js version**: 20.x or newer.
-3. **Application root**: the folder you uploaded the code into.
-4. **Application URL**: your domain (or a subdomain if you want to test
-   before cutting over DNS).
-5. **Application startup file**: `server.js`
-6. Save/Create.
+Run this **from your own machine** (Turso is reachable over the internet,
+so you don't need to be inside Hostinger to do this):
+
+```bash
+# Temporarily point at Turso for this one command
+DATABASE_URL="libsql://your-db-name-yourorg.turso.io?authToken=..." npx prisma migrate deploy
+
+DATABASE_URL="libsql://your-db-name-yourorg.turso.io?authToken=..." ADMIN_EMAIL="you@yourdomain.com" ADMIN_PASSWORD="pick-a-strong-one" npm run db:seed
+```
+
+(On Windows PowerShell, set each as `$env:DATABASE_URL = "..."` on its own
+line first instead of prefixing the command.)
+
+This creates the schema and loads the 9 universities / 7 programs / 6 blog
+posts, and creates your production admin account. Use a **real** email and
+a strong password here — don't reuse the local dev defaults.
 
 ---
 
-## 3. Environment variables
+## 3. Set environment variables in Hostinger
 
-In the same Node.js app screen there's an **Environment variables** section.
-Add these (copy the shape from `.env.example` in the repo):
+In the Hostinger deployment settings for this project (the same screen
+that showed the build logs), find the environment variables section and
+add:
 
 | Key | Value |
 |---|---|
-| `DATABASE_URL` | `file:./dev.db` |
+| `DATABASE_URL` | the same `libsql://...?authToken=...` string from step 1 |
 | `ADMIN_SESSION_SECRET` | a fresh random string — generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
-| `ADMIN_EMAIL` | the real admin login email you want in production |
-| `ADMIN_PASSWORD` | a strong password — this is only used once, by the seed step below |
 | `NODE_ENV` | `production` |
 
-Do **not** reuse the dev credentials (`admin@gradscholar.in` /
-`GradScholar@2026`) in production — pick a new password here.
-
-If hPanel doesn't give you an env var UI, create a `.env` file directly in
-the app root via File Manager with the same keys/values instead.
+`ADMIN_EMAIL` / `ADMIN_PASSWORD` are **not** needed here — those were only
+for the one-time seed step above, which you already ran against Turso.
 
 ---
 
-## 4. Install, migrate, seed, build
+## 4. Deploy
 
-hPanel's Node.js screen has buttons for **NPM Install** and a way to open a
-terminal/SSH for this app. Run, in order:
+Push to `main` (or hit **Redeploy** on the existing commit). The build no
+longer touches any database at build time, so it will succeed even before
+step 1–3 are done — but the site won't have real data or working admin
+login until `DATABASE_URL` (pointing at the seeded Turso DB) is set and a
+redeploy has picked it up.
 
-```bash
-npm install
-npx prisma migrate deploy
-npm run db:seed
-npm run build
-```
-
-- `npm install` also triggers `prisma generate` automatically (via the
-  `postinstall` script) — no separate step needed.
-- `prisma migrate deploy` creates `dev.db` and applies the schema.
-- `db:seed` loads the 9 universities / 7 programs / 6 blog posts and
-  creates your admin account from the env vars above.
-- `npm run build` produces the production `.next` build.
+Visit the deployment URL, then `/admin/login` with the email/password from
+step 2.
 
 ---
 
-## 5. Start / restart the app
+## 5. Point your domain at Hostinger through Cloudflare
 
-Back in hPanel's Node.js app screen, click **Restart**. Passenger will run
-`node server.js` (the startup file you set in step 2), which listens on the
-port Hostinger assigns via `PORT`.
-
-Visit the Application URL — you should see the live site. Try
-`/admin/login` and sign in with the `ADMIN_EMAIL`/`ADMIN_PASSWORD` you set.
-
----
-
-## 6. Point your domain at Hostinger through Cloudflare
-
-Since the domain is registered at Hostinger but you want Cloudflare doing
-DNS:
-
-1. **Cloudflare** → Add a site → enter your domain. Cloudflare will scan
-   existing DNS records and give you two nameservers
-   (e.g. `xxx.ns.cloudflare.com`).
-2. **Hostinger** → Domains → your domain → **DNS / Nameservers** → change
-   nameservers to the two Cloudflare gave you. (This is the step that
-   actually hands DNS control to Cloudflare — do this deliberately, it
-   affects email/other records too if you have any on this domain.)
-3. Wait for Cloudflare to show the zone as **Active** (can take minutes to
-   a few hours).
-4. In Cloudflare → **DNS**, add a record pointing at your Hostinger app:
-   - If Hostinger gave you an IP for the Node app: an **A** record,
-     `@` → that IP.
-   - If Hostinger gave you a hostname instead: a **CNAME**, `@` → that
-     hostname (use Cloudflare's "CNAME flattening," which it does
-     automatically at the root).
-   - Add `www` the same way if you want `www.yourdomain.com` to work too.
-5. Keep the record **Proxied** (orange cloud) for Cloudflare's CDN/SSL —
-   this is the normal setting, and it also hides your origin IP.
-6. Cloudflare → **SSL/TLS** → set mode to **Full** (not "Flexible") since
-   your Hostinger app should already be reachable over HTTPS — check what
-   Hostinger's panel shows for your app's SSL/port setup and match it here.
-   If you're unsure, Full is the safer default with Passenger apps.
-
-DNS propagation is usually fast with Cloudflare but can take up to 24h
-worst-case.
+1. **Cloudflare** → Add a site → enter your domain. Cloudflare scans
+   existing DNS and gives you two nameservers (e.g. `xxx.ns.cloudflare.com`).
+2. **Hostinger** → Domains → your domain → DNS/Nameservers → change to
+   those two Cloudflare nameservers. (This hands DNS control to
+   Cloudflare — double-check you don't have other records, like email,
+   on this domain that need to be recreated in Cloudflare first.)
+3. Wait for Cloudflare to show the zone as **Active**.
+4. In Cloudflare → DNS, add a record pointing at whatever address Hostinger
+   gave you for this deployment (check the deployment screen for an IP or
+   hostname to target) — **A** record if it's an IP, **CNAME** if it's a
+   hostname. Add `www` the same way if needed.
+5. Keep it **Proxied** (orange cloud).
+6. Cloudflare → SSL/TLS → set mode to **Full** to match Hostinger's own
+   HTTPS.
 
 ---
 
-## Things worth knowing about this setup
+## Known limitation: uploaded logo images
 
-- **The database is a single SQLite file** (`dev.db` in the app root). It
-  persists across restarts, but treat it like real data: **back it up**
-  (hPanel File Manager → download the file periodically, or set up a cron
-  that copies it somewhere). There's no automatic replication.
-- **Uploaded university logos** land in `public/logos/` on the server and
-  are served directly from disk — they persist the same way `dev.db` does.
-  If you ever redeploy by re-uploading a zip, make sure you don't overwrite
-  `public/logos/` or `dev.db` with the old versions from your local machine.
-- **Single process, no auto-scaling.** This is fine for the traffic a site
-  like this typically gets, but if it ever needs to handle serious load,
-  moving to Vercel or a VPS is the next step — the app code doesn't need to
-  change for that.
-- **Redeploying changes**: upload the new files (again excluding
-  `node_modules`, `.next`, `.env`, `dev.db`, `public/logos/` uploads),
-  run `npm install && npm run build`, then Restart the app in hPanel.
+The 9 seeded university logos are committed to the repo (`public/logos/`),
+so they're fine — they redeploy with the code every time.
+
+But if you **add a new university via the admin panel and upload a new
+logo**, that file is written to `public/logos/` on the live server's disk
+— which, per the note at the top of this doc, does not survive the next
+redeploy. It'll work fine until the next `git push`, then that specific
+logo image will 404 (the university record itself is safe in Turso; only
+the image file is at risk).
+
+Workaround for now: after uploading a new logo through the admin panel,
+download it from the live site and add it to `public/logos/` in the repo
+too, so it's part of the next deploy. A proper fix (routing uploads to
+Cloudflare R2 or S3 instead of local disk) is a reasonable next step if
+you'll be adding universities often — say the word and I'll build it.
+
+---
+
+## Redeploying after future code changes
+
+Just push to `main`. No manual migrate/seed step needed unless you changed
+`prisma/schema.prisma` (in which case run `prisma migrate deploy` against
+Turso again, same as step 2, before or after pushing).
