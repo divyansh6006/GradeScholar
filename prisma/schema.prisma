@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model University {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  shortName         String
+  tagline           String
+  logo              String
+  logoWidth         Int
+  logoHeight        Int
+  accreditation     String // JSON array of strings
+  naac              String
+  established       Int
+  bestFor           String
+  feesMin           Int
+  feesMax           Int
+  emiStarts         Int
+  duration          String
+  programs          String // JSON array of program names
+  highlights        String // JSON array of strings
+  overview          String
+  approvals         String // JSON array of strings
+  placementSupport  Boolean  @default(true)
+  avgSalary         String
+  rating            Float    @default(4.5)
+  color             String   @default("#14400C")
+  published         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Program {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  shortName       String
+  tagline         String
+  duration        String
+  eligibility     String
+  specializations String // JSON array
+  bestFor         String // JSON array
+  outcomes        String // JSON array
+  universities    String // JSON array of university slugs
+  published       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  category  String
+  excerpt   String
+  content   String // JSON array of paragraphs
+  readTime  String
+  date      DateTime @default(now())
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  INTERESTED
+  APPLIED
+  ADMITTED
+  ENROLLED
+  LOST
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  name       String
+  phone      String
+  email      String
+  program    String
+  university String?
+  experience String
+  source     String     @default("website")
+  status     LeadStatus @default(NEW)
+  notes      LeadNote[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+}
