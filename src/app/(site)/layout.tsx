@@ -4,6 +4,8 @@ import FloatingCTAs from "@/components/layout/FloatingCTAs";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import { getUniversities, getPrograms } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const [universities, programs] = await Promise.all([getUniversities(), getPrograms()]);
 

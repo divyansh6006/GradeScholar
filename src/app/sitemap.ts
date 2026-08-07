@@ -4,6 +4,8 @@ import { siteConfig } from "@/lib/site-config";
 
 const BASE_URL = siteConfig.url;
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [universities, programs, blogPosts] = await Promise.all([
     getUniversities(),
