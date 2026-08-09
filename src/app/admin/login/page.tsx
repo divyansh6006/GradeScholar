@@ -64,7 +64,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/20"
-              placeholder="admin@gradscholars.in"
+              placeholder="Enter your email"
             />
           </label>
           <label className="mt-4 block">
@@ -75,7 +75,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/20"
-              placeholder="••••••••"
+              placeholder="Enter your password"
             />
           </label>
 

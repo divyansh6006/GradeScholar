@@ -139,7 +139,7 @@ export const universities: University[] = [
         total: 213700
       },
       onePayment: {
-        label: "One-Time Payment (Self Payment)",
+        label: "One time payment for 2 year (self payment)",
         total: 207000
       },
       noCostEmi: {
