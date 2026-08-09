@@ -16,6 +16,38 @@ export const leadSchema = z.object({
 
 export type LeadInput = z.infer<typeof leadSchema>;
 
+export const feePlansSchema = z.object({
+  semesterWise: z
+    .object({
+      label: z.string().optional(),
+      semesters: z.array(z.number().nonnegative()),
+      total: z.number().nonnegative(),
+    })
+    .optional(),
+  annual: z
+    .object({
+      label: z.string().optional(),
+      years: z.array(z.number().nonnegative()),
+      total: z.number().nonnegative(),
+    })
+    .optional(),
+  onePayment: z
+    .object({
+      label: z.string().optional(),
+      total: z.number().nonnegative(),
+    })
+    .optional(),
+  noCostEmi: z
+    .object({
+      label: z.string().optional(),
+      monthly: z.number().nonnegative(),
+      months: z.number().int().positive(),
+    })
+    .optional(),
+});
+
+export type FeePlansInput = z.infer<typeof feePlansSchema>;
+
 export const universitySchema = z.object({
   name: z.string().min(3, "Name is required"),
   slug: z
@@ -34,6 +66,7 @@ export const universitySchema = z.object({
   feesMin: z.number().nonnegative(),
   feesMax: z.number().nonnegative(),
   emiStarts: z.number().nonnegative(),
+  feePlans: feePlansSchema.nullable().optional(),
   duration: z.string().min(1, "Required"),
   programs: z.array(z.string()).min(1, "Add at least one program"),
   highlights: z.array(z.string()).min(1, "Add at least one highlight"),

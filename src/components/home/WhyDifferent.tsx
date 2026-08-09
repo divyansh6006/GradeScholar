@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { Check, Minus, X } from "lucide-react";
+import { siteConfig } from "@/lib/site-config";
 
 type Status = boolean | "partial";
 
@@ -47,7 +48,7 @@ export default function WhyDifferent() {
     <section className="py-20 lg:py-28 bg-cream-50">
       <Container>
         <SectionHeading
-          eyebrow="Why Grad Scholar"
+          eyebrow={`Why ${siteConfig.name}`}
           title="See exactly how we compare"
           description="Transparency is part of the pitch — here's how working with us stacks up against applying directly or going through a generic agent."
           align="center"
@@ -63,7 +64,7 @@ export default function WhyDifferent() {
                   </th>
                   <th className="px-6 py-5 text-center">
                     <span className="rounded-full bg-green-950 px-3 py-1.5 text-xs font-bold text-gold-400">
-                      Grad Scholar
+                      {siteConfig.name}
                     </span>
                   </th>
                   <th className="px-6 py-5 text-center font-display text-sm font-semibold text-green-900/50">

@@ -6,6 +6,13 @@ import type {
   BlogPost as DbBlogPost,
 } from "@/generated/prisma/client";
 
+export type FeePlans = {
+  semesterWise?: { label?: string; semesters: number[]; total: number };
+  annual?: { label?: string; years: number[]; total: number };
+  onePayment?: { label?: string; total: number };
+  noCostEmi?: { label?: string; monthly: number; months: number };
+};
+
 export type University = {
   id: string;
   slug: string;
@@ -21,6 +28,7 @@ export type University = {
   bestFor: string;
   fees: { min: number; max: number };
   emiStarts: number;
+  feePlans: FeePlans | null;
   duration: string;
   programs: string[];
   highlights: string[];
@@ -69,6 +77,15 @@ function parseJsonArray(value: string): string[] {
   }
 }
 
+function parseFeePlans(value: string | null): FeePlans | null {
+  if (!value) return null;
+  try {
+    return JSON.parse(value) as FeePlans;
+  } catch {
+    return null;
+  }
+}
+
 function mapUniversity(u: DbUniversity): University {
   return {
     id: u.id,
@@ -85,6 +102,7 @@ function mapUniversity(u: DbUniversity): University {
     bestFor: u.bestFor,
     fees: { min: u.feesMin, max: u.feesMax },
     emiStarts: u.emiStarts,
+    feePlans: parseFeePlans(u.feePlans),
     duration: u.duration,
     programs: parseJsonArray(u.programs),
     highlights: parseJsonArray(u.highlights),

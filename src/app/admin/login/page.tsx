@@ -45,8 +45,8 @@ function LoginForm() {
           <Image
             src="/brand/grad-scholar-mark.png"
             alt=""
-            width={683}
-            height={600}
+            width={574}
+            height={522}
             className="h-14 w-14 object-contain"
           />
           <h1 className="mt-4 font-display text-xl font-semibold text-white">

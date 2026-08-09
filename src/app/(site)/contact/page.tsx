@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: "Contact Us — Book a Free Career Consultation",
   description:
-    "Schedule a free career consultation with Grad Scholar. Call, WhatsApp, or book a slot online.",
+    `Schedule a free career consultation with ${siteConfig.name}. Call, WhatsApp, or book a slot online.`,
 };
 
 const channels = [

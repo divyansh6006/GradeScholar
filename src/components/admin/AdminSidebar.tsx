@@ -38,12 +38,12 @@ export function AdminSidebar({ name, email }: { name: string; email: string }) {
         <Image
           src="/brand/grad-scholar-mark.png"
           alt=""
-          width={683}
-          height={600}
+          width={574}
+          height={522}
           className="h-8 w-8 object-contain"
         />
         <div>
-          <p className="font-display text-sm font-semibold text-green-950">Grad Scholar</p>
+          <p className="font-display text-sm font-semibold text-green-950">Grad Scholars</p>
           <p className="text-[11px] text-green-900/45">Admin Panel</p>
         </div>
       </div>

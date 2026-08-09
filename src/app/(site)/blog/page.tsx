@@ -4,13 +4,13 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getBlogPosts } from "@/lib/data";
 import { ArrowUpRight } from "lucide-react";
+import { siteConfig } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Industry Insights — MBA Rankings, Salary Reports & Guides",
-  description:
-    "In-depth guides on Online MBA rankings, salary reports, specializations and admissions — from Grad Scholar.",
+  description: `In-depth guides on Online MBA rankings, salary reports, specializations and admissions — from ${siteConfig.name}.`,
 };
 
 export default async function BlogPage() {

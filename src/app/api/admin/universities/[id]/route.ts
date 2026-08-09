@@ -30,7 +30,7 @@ export async function PUT(
     return NextResponse.json({ error: "A university with this slug already exists" }, { status: 409 });
   }
 
-  const { accreditation, programs, highlights, approvals, ...rest } = parsed.data;
+  const { accreditation, programs, highlights, approvals, feePlans, ...rest } = parsed.data;
   const university = await db.university.update({
     where: { id },
     data: {
@@ -39,6 +39,7 @@ export async function PUT(
       programs: JSON.stringify(programs),
       highlights: JSON.stringify(highlights),
       approvals: JSON.stringify(approvals),
+      feePlans: feePlans ? JSON.stringify(feePlans) : null,
     },
   });
 

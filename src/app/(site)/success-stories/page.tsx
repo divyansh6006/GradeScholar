@@ -4,11 +4,11 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { successStories } from "@/data/content";
+import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Student Success Stories — Real Career Transitions",
-  description:
-    "Real career transitions from professionals who chose the right online degree with Grad Scholar.",
+  description: `Real career transitions from professionals who chose the right online degree with ${siteConfig.name}.`,
 };
 
 export default function SuccessStoriesPage() {

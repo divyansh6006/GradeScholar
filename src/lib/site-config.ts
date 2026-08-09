@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name: "Grad Scholar",
+  name: "Grad Scholars",
   tagline: "Every Step Matters",
-  legalName: "Grad Scholar",
+  legalName: "Grad Scholars",
   domain: "gradscholar.in",
   url: "https://www.gradscholar.in",
   phoneDisplay: "+91 99889 74674",

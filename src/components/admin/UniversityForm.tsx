@@ -5,12 +5,23 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, Upload } from "lucide-react";
 import type { University as DbUniversity } from "@/generated/prisma/client";
+import type { FeePlans } from "@/lib/data";
 
 type Props = {
   university?: DbUniversity;
 };
 
+function parseFeePlans(raw: string | null | undefined): FeePlans | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as FeePlans;
+  } catch {
+    return null;
+  }
+}
+
 function toFormState(u?: DbUniversity) {
+  const feePlans = parseFeePlans(u?.feePlans);
   return {
     name: u?.name ?? "",
     slug: u?.slug ?? "",
@@ -36,7 +47,44 @@ function toFormState(u?: DbUniversity) {
     rating: u?.rating ?? 4.5,
     color: u?.color ?? "#14400C",
     published: u?.published ?? true,
+    semesterAmounts: feePlans?.semesterWise?.semesters.join(", ") ?? "",
+    semesterTotal: feePlans?.semesterWise?.total ?? "",
+    annualAmounts: feePlans?.annual?.years.join(", ") ?? "",
+    annualTotal: feePlans?.annual?.total ?? "",
+    onePaymentLabel: feePlans?.onePayment?.label ?? "One-Time Payment (Self Payment)",
+    onePaymentTotal: feePlans?.onePayment?.total ?? "",
+    emiLabel: feePlans?.noCostEmi?.label ?? "No-Cost EMI",
+    emiMonthly: feePlans?.noCostEmi?.monthly ?? "",
+    emiMonths: feePlans?.noCostEmi?.months ?? 24,
   };
+}
+
+function buildFeePlans(form: ReturnType<typeof toFormState>): FeePlans | null {
+  const plans: FeePlans = {};
+
+  const semesters = splitCsv(String(form.semesterAmounts)).map(Number).filter((n) => !isNaN(n));
+  if (semesters.length && form.semesterTotal !== "") {
+    plans.semesterWise = { semesters, total: Number(form.semesterTotal) };
+  }
+
+  const years = splitCsv(String(form.annualAmounts)).map(Number).filter((n) => !isNaN(n));
+  if (years.length && form.annualTotal !== "") {
+    plans.annual = { years, total: Number(form.annualTotal) };
+  }
+
+  if (form.onePaymentTotal !== "") {
+    plans.onePayment = { label: form.onePaymentLabel || undefined, total: Number(form.onePaymentTotal) };
+  }
+
+  if (form.emiMonthly !== "" && form.emiMonths) {
+    plans.noCostEmi = {
+      label: form.emiLabel || undefined,
+      monthly: Number(form.emiMonthly),
+      months: Number(form.emiMonths),
+    };
+  }
+
+  return Object.keys(plans).length ? plans : null;
 }
 
 export function UniversityForm({ university }: Props) {
@@ -88,6 +136,7 @@ export function UniversityForm({ university }: Props) {
       feesMin: Number(form.feesMin),
       feesMax: Number(form.feesMax),
       emiStarts: Number(form.emiStarts),
+      feePlans: buildFeePlans(form),
       duration: form.duration,
       programs: splitCsv(form.programs),
       highlights: splitLines(form.highlights),
@@ -190,6 +239,38 @@ export function UniversityForm({ university }: Props) {
           </Field>
           <Field label="Duration">
             <Input value={form.duration} onChange={(v) => set("duration", v)} required placeholder="2 Years" />
+          </Field>
+        </Grid>
+      </Section>
+
+      <Section title="Fee &amp; Payment Plans (optional)">
+        <p className="mb-4 text-xs text-green-900/50">
+          Leave any plan blank to hide it on the university page. Amounts in ₹.
+        </p>
+        <Grid>
+          <Field label="Semester-wise: amounts (comma separated)">
+            <Input value={form.semesterAmounts} onChange={(v) => set("semesterAmounts", v)} placeholder="56300, 56300, 56300, 56100" />
+          </Field>
+          <Field label="Semester-wise: total (₹)">
+            <Input type="number" value={form.semesterTotal} onChange={(v) => set("semesterTotal", v === "" ? "" : Number(v))} />
+          </Field>
+          <Field label="Annual: amounts (comma separated)">
+            <Input value={form.annualAmounts} onChange={(v) => set("annualAmounts", v)} placeholder="106850, 106850" />
+          </Field>
+          <Field label="Annual: total (₹)">
+            <Input type="number" value={form.annualTotal} onChange={(v) => set("annualTotal", v === "" ? "" : Number(v))} />
+          </Field>
+          <Field label="One-Time Payment: label">
+            <Input value={form.onePaymentLabel} onChange={(v) => set("onePaymentLabel", v)} />
+          </Field>
+          <Field label="One-Time Payment: total (₹)">
+            <Input type="number" value={form.onePaymentTotal} onChange={(v) => set("onePaymentTotal", v === "" ? "" : Number(v))} />
+          </Field>
+          <Field label="No-Cost EMI: monthly amount (₹)">
+            <Input type="number" value={form.emiMonthly} onChange={(v) => set("emiMonthly", v === "" ? "" : Number(v))} />
+          </Field>
+          <Field label="No-Cost EMI: number of months">
+            <Input type="number" value={form.emiMonths} onChange={(v) => set("emiMonths", Number(v))} />
           </Field>
         </Grid>
       </Section>

@@ -14,8 +14,8 @@ export function BrandLogo({
       <Image
         src="/brand/grad-scholar-mark.png"
         alt=""
-        width={683}
-        height={600}
+        width={574}
+        height={522}
         className="h-9 w-9 object-contain"
         priority
       />

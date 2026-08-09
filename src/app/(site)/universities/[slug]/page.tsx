@@ -132,6 +132,73 @@ export default async function UniversityDetailPage({
                 </div>
               </div>
 
+              {uni.feePlans && (
+                <div>
+                  <h2 className="font-display text-2xl font-semibold text-green-950">
+                    Payment Plans
+                  </h2>
+                  <p className="mt-1 text-sm text-green-900/55">
+                    Choose whichever schedule works best for you — all lead to the same program.
+                  </p>
+                  <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {uni.feePlans.semesterWise && (
+                      <PlanCard title="Semester-wise">
+                        <ul className="space-y-1.5 text-sm text-green-900/70">
+                          {uni.feePlans.semesterWise.semesters.map((amt, i) => (
+                            <li key={i} className="flex justify-between">
+                              <span>Semester {i + 1}</span>
+                              <span className="font-semibold text-green-950">₹{amt.toLocaleString("en-IN")}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <PlanTotal value={uni.feePlans.semesterWise.total} />
+                      </PlanCard>
+                    )}
+                    {uni.feePlans.annual && (
+                      <PlanCard title="Annual">
+                        <ul className="space-y-1.5 text-sm text-green-900/70">
+                          {uni.feePlans.annual.years.map((amt, i) => (
+                            <li key={i} className="flex justify-between">
+                              <span>Year {i + 1}</span>
+                              <span className="font-semibold text-green-950">₹{amt.toLocaleString("en-IN")}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <PlanTotal value={uni.feePlans.annual.total} />
+                      </PlanCard>
+                    )}
+                    {uni.feePlans.onePayment && (
+                      <PlanCard
+                        title={uni.feePlans.onePayment.label ?? "One-Time Payment"}
+                        highlight="Best Value"
+                      >
+                        <p className="text-sm text-green-900/60">
+                          Pay the full program fee upfront and skip semester/annual instalments.
+                        </p>
+                        <PlanTotal value={uni.feePlans.onePayment.total} />
+                      </PlanCard>
+                    )}
+                    {uni.feePlans.noCostEmi && (
+                      <PlanCard
+                        title={uni.feePlans.noCostEmi.label ?? "No-Cost EMI"}
+                        highlight="Popular"
+                      >
+                        <p className="text-sm text-green-900/60">
+                          Spread the cost with zero extra interest.
+                        </p>
+                        <p className="mt-3 font-display text-2xl font-semibold text-gold-600">
+                          ₹{uni.feePlans.noCostEmi.monthly.toLocaleString("en-IN")}
+                          <span className="text-sm font-medium text-green-900/50">/month</span>
+                        </p>
+                        <p className="text-xs text-green-900/45">
+                          for {uni.feePlans.noCostEmi.months} months, no cost EMI
+                        </p>
+                      </PlanCard>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <div>
                 <h2 className="font-display text-2xl font-semibold text-green-950">
                   Programs Offered
@@ -235,5 +302,36 @@ function Row({ label, value }: { label: string; value: string }) {
       <td className="px-5 py-3.5 font-medium text-green-900/60 w-1/2">{label}</td>
       <td className="px-5 py-3.5 font-semibold text-green-950">{value}</td>
     </tr>
+  );
+}
+
+function PlanCard({
+  title,
+  highlight,
+  children,
+}: {
+  title: string;
+  highlight?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative rounded-2xl border border-green-900/8 bg-cream-50 p-5">
+      {highlight && (
+        <span className="absolute -top-3 right-5 rounded-full bg-gold-500 px-3 py-1 text-[11px] font-bold text-green-950">
+          {highlight}
+        </span>
+      )}
+      <h3 className="font-display text-sm font-semibold text-green-950">{title}</h3>
+      <div className="mt-3">{children}</div>
+    </div>
+  );
+}
+
+function PlanTotal({ value }: { value: number }) {
+  return (
+    <p className="mt-3 flex items-baseline justify-between border-t border-green-900/8 pt-3">
+      <span className="text-xs font-semibold uppercase tracking-wide text-green-900/45">Total</span>
+      <span className="font-display text-lg font-semibold text-green-950">₹{value.toLocaleString("en-IN")}</span>
+    </p>
   );
 }

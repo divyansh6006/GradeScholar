@@ -23,6 +23,7 @@ model University {
   feesMin           Int
   feesMax           Int
   emiStarts         Int
+  feePlans          String? // JSON: { semesterWise?, annual?, onePayment?, noCostEmi? } — see src/lib/data.ts
   duration          String
   programs          String // JSON array of program names
   highlights        String // JSON array of strings
