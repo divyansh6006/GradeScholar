@@ -32,6 +32,7 @@ async function main() {
         feesMin: u.fees.min,
         feesMax: u.fees.max,
         emiStarts: u.emiStarts,
+        feePlans: u.feePlans ? JSON.stringify(u.feePlans) : null,
         duration: u.duration,
         programs: JSON.stringify(u.programs),
         highlights: JSON.stringify(u.highlights),

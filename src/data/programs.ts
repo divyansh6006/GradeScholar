@@ -19,9 +19,25 @@ export const programs: Program[] = [
     tagline: "The credential that moves you from execution to leadership.",
     duration: "2 Years",
     eligibility: "Graduation in any discipline (min 50%)",
-    specializations: ["Finance", "Marketing", "HR", "Operations", "Analytics", "IT"],
-    bestFor: ["Working Professionals", "IT Professionals", "Team Leads", "Entrepreneurs"],
-    outcomes: ["Team Lead → Manager", "Manager → Senior Manager", "IC → Leadership Track"],
+    specializations: [
+      "Finance",
+      "Marketing",
+      "HR",
+      "Operations",
+      "Analytics",
+      "IT"
+    ],
+    bestFor: [
+      "Working Professionals",
+      "IT Professionals",
+      "Team Leads",
+      "Entrepreneurs"
+    ],
+    outcomes: [
+      "Team Lead → Manager",
+      "Manager → Senior Manager",
+      "IC → Leadership Track"
+    ],
     universities: [
       "nmims-online",
       "amity-university-online",
@@ -32,7 +48,18 @@ export const programs: Program[] = [
       "dy-patil-university-online",
       "iim-executive-education",
       "manipal-university-online",
-    ],
+      "lpu-online",
+      "andhra-university-online",
+      "kurukshetra-university-online",
+      "op-jindal-online",
+      "vgu-online",
+      "bharathidasan-university-online",
+      "vignan-university-online",
+      "vistas-online",
+      "alliance-university-online",
+      "kalasalingam-university-online",
+      "assam-downtown-university-online"
+    ]
   },
   {
     slug: "executive-mba",
@@ -41,10 +68,25 @@ export const programs: Program[] = [
     tagline: "Built for professionals with 5+ years leading teams and P&Ls.",
     duration: "1-2 Years",
     eligibility: "Graduation + 5 years work experience",
-    specializations: ["General Management", "Leadership", "Strategy"],
-    bestFor: ["Senior Professionals", "Entrepreneurs", "Government Employees"],
-    outcomes: ["Senior Manager → Director", "Founder → Scaled Operator"],
-    universities: ["nmims-online", "amity-university-online", "iim-executive-education"],
+    specializations: [
+      "General Management",
+      "Leadership",
+      "Strategy"
+    ],
+    bestFor: [
+      "Senior Professionals",
+      "Entrepreneurs",
+      "Government Employees"
+    ],
+    outcomes: [
+      "Senior Manager → Director",
+      "Founder → Scaled Operator"
+    ],
+    universities: [
+      "nmims-online",
+      "amity-university-online",
+      "iim-executive-education"
+    ]
   },
   {
     slug: "online-mca",
@@ -53,9 +95,20 @@ export const programs: Program[] = [
     tagline: "Deepen your technical credentials without leaving your job.",
     duration: "2 Years",
     eligibility: "Graduation with Mathematics at 10+2 or graduation level",
-    specializations: ["Software Development", "Data Science", "Cloud Computing"],
-    bestFor: ["IT Professionals", "Career Switchers", "Fresh Graduates"],
-    outcomes: ["Developer → Senior Developer", "Support → Engineering"],
+    specializations: [
+      "Software Development",
+      "Data Science",
+      "Cloud Computing"
+    ],
+    bestFor: [
+      "IT Professionals",
+      "Career Switchers",
+      "Fresh Graduates"
+    ],
+    outcomes: [
+      "Developer → Senior Developer",
+      "Support → Engineering"
+    ],
     universities: [
       "amity-university-online",
       "chandigarh-university-online",
@@ -63,7 +116,9 @@ export const programs: Program[] = [
       "gla-university",
       "dy-patil-university-online",
       "manipal-university-online",
-    ],
+      "vgu-online",
+      "vignan-university-online"
+    ]
   },
   {
     slug: "online-bba",
@@ -72,9 +127,19 @@ export const programs: Program[] = [
     tagline: "A strong foundation in business, built for flexible learning.",
     duration: "3 Years",
     eligibility: "10+2 in any stream",
-    specializations: ["General Management", "Marketing", "Finance"],
-    bestFor: ["Fresh Graduates", "Career Switchers"],
-    outcomes: ["Entry-level → Business Roles", "Foundation for MBA"],
+    specializations: [
+      "General Management",
+      "Marketing",
+      "Finance"
+    ],
+    bestFor: [
+      "Fresh Graduates",
+      "Career Switchers"
+    ],
+    outcomes: [
+      "Entry-level → Business Roles",
+      "Foundation for MBA"
+    ],
     universities: [
       "amity-university-online",
       "chandigarh-university-online",
@@ -83,7 +148,12 @@ export const programs: Program[] = [
       "gla-university-online",
       "dy-patil-university-online",
       "manipal-university-online",
-    ],
+      "lpu-online",
+      "vgu-online",
+      "vignan-university-online",
+      "alliance-university-online",
+      "assam-downtown-university-online"
+    ]
   },
   {
     slug: "online-bca",
@@ -92,15 +162,28 @@ export const programs: Program[] = [
     tagline: "Start your technology career with a flexible degree.",
     duration: "3 Years",
     eligibility: "10+2 with Mathematics",
-    specializations: ["Programming", "Web Development", "Database Systems"],
-    bestFor: ["Fresh Graduates", "Career Switchers"],
-    outcomes: ["Foundation for MCA", "Entry-level Developer Roles"],
+    specializations: [
+      "Programming",
+      "Web Development",
+      "Database Systems"
+    ],
+    bestFor: [
+      "Fresh Graduates",
+      "Career Switchers"
+    ],
+    outcomes: [
+      "Foundation for MCA",
+      "Entry-level Developer Roles"
+    ],
     universities: [
       "amity-university-online",
       "chandigarh-university-online",
       "gla-university",
       "dy-patil-university-online",
-    ],
+      "lpu-online",
+      "vgu-online",
+      "vignan-university-online"
+    ]
   },
   {
     slug: "online-mcom",
@@ -109,15 +192,27 @@ export const programs: Program[] = [
     tagline: "Advance your finance and commerce expertise.",
     duration: "2 Years",
     eligibility: "Graduation in Commerce or related discipline",
-    specializations: ["Accounting & Finance", "Taxation", "Banking"],
-    bestFor: ["Finance Professionals", "Government Employees"],
-    outcomes: ["Accountant → Finance Manager", "Foundation for CA/CS/CMA"],
+    specializations: [
+      "Accounting & Finance",
+      "Taxation",
+      "Banking"
+    ],
+    bestFor: [
+      "Finance Professionals",
+      "Government Employees"
+    ],
+    outcomes: [
+      "Accountant → Finance Manager",
+      "Foundation for CA/CS/CMA"
+    ],
     universities: [
       "amity-university-online",
       "shoolini-university-online",
       "gla-university-online",
       "manipal-university-online",
-    ],
+      "lpu-online",
+      "alliance-university-online"
+    ]
   },
   {
     slug: "online-ma",
@@ -126,11 +221,26 @@ export const programs: Program[] = [
     tagline: "Postgraduate studies in humanities and social sciences.",
     duration: "2 Years",
     eligibility: "Graduation in any discipline",
-    specializations: ["Economics", "English", "Public Administration", "Psychology"],
-    bestFor: ["Government Employees", "Educators", "Career Switchers"],
-    outcomes: ["Eligibility for competitive exams", "Academic & research roles"],
-    universities: ["gla-university-online"],
-  },
+    specializations: [
+      "Economics",
+      "English",
+      "Public Administration",
+      "Psychology"
+    ],
+    bestFor: [
+      "Government Employees",
+      "Educators",
+      "Career Switchers"
+    ],
+    outcomes: [
+      "Eligibility for competitive exams",
+      "Academic & research roles"
+    ],
+    universities: [
+      "gla-university-online",
+      "vgu-online"
+    ]
+  }
 ];
 
 export function getProgramBySlug(slug: string) {
