@@ -107,8 +107,8 @@ export const universities: University[] = [
     shortName: "Amity Online",
     tagline: "Globally Recognized Online Degrees",
     logo: "/logos/amity-university-online.png",
-    logoWidth: 263,
-    logoHeight: 73,
+    logoWidth: 150,
+    logoHeight: 67,
     accreditation: [
       "UGC-Entitled",
       "NAAC A+"
@@ -398,9 +398,9 @@ export const universities: University[] = [
     name: "Ajeenkya DY Patil University Online",
     shortName: "DY Patil Online",
     tagline: "The Innovation University, Now Online",
-    logo: "/logos/dy-patil-university-online.webp",
-    logoWidth: 1156,
-    logoHeight: 334,
+    logo: "/logos/dy-patil-university-online.png",
+    logoWidth: 270,
+    logoHeight: 102,
     accreditation: [
       "UGC-DEB Approved",
       "NAAC A"
