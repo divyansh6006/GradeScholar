@@ -84,7 +84,7 @@ async function main() {
   }
   console.log(`Seeded ${blogPosts.length} blog posts`);
 
-  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@gradscholar.in";
+  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@gradscholars.in";
   const adminPassword = process.env.ADMIN_PASSWORD ?? "GradScholar@2026";
   const existing = await db.adminUser.findUnique({ where: { email: adminEmail } });
   if (!existing) {
