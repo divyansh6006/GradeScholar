@@ -38,8 +38,8 @@ export const universities: University[] = [
     shortName: "NMIMS Online",
     tagline: "Premium Management & Executive Education",
     logo: "/logos/nmims-online.png",
-    logoWidth: 281,
-    logoHeight: 118,
+    logoWidth: 869,
+    logoHeight: 133,
     accreditation: [
       "UGC-Entitled",
       "AICTE"
@@ -177,9 +177,9 @@ export const universities: University[] = [
     name: "Chandigarh University Online",
     shortName: "Chandigarh University",
     tagline: "Industry-Focused Learning with Global Exposure",
-    logo: "/logos/chandigarh-university-online.webp",
-    logoWidth: 221,
-    logoHeight: 78,
+    logo: "/logos/chandigarh-university-online.png",
+    logoWidth: 379,
+    logoHeight: 82,
     accreditation: [
       "UGC-Entitled",
       "NAAC A+"
@@ -240,8 +240,8 @@ export const universities: University[] = [
     shortName: "Shoolini University",
     tagline: "Research-Driven & Innovation-Focused Programs",
     logo: "/logos/shoolini-university-online.png",
-    logoWidth: 870,
-    logoHeight: 450,
+    logoWidth: 1250,
+    logoHeight: 406,
     accreditation: [
       "UGC-Entitled",
       "NAAC A+"
@@ -503,8 +503,8 @@ export const universities: University[] = [
     shortName: "Manipal Online",
     tagline: "Inspired by Life — Globally Ranked Online Degrees",
     logo: "/logos/manipal-university-online.png",
-    logoWidth: 1042,
-    logoHeight: 429,
+    logoWidth: 1200,
+    logoHeight: 164,
     accreditation: [
       "UGC-Entitled",
       "NAAC A++"
