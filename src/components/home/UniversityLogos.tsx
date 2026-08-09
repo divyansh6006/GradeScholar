@@ -22,6 +22,7 @@ export default function UniversityLogos({ universities }: { universities: Univer
                 width={u.logoWidth}
                 height={u.logoHeight}
                 className="max-h-16 w-auto object-contain"
+                unoptimized
               />
             </div>
           ))}

@@ -56,6 +56,7 @@ export default function AccreditationTrust({ universities }: { universities: Uni
                   width={u.logoWidth}
                   height={u.logoHeight}
                   className="max-h-10 w-auto object-contain"
+                  unoptimized
                 />
               </div>
               <div className="min-w-0">

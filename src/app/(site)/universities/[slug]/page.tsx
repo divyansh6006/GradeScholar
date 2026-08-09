@@ -50,6 +50,7 @@ export default async function UniversityDetailPage({
                   height={uni.logoHeight}
                   className="max-h-10 w-auto object-contain"
                   priority
+                  unoptimized
                 />
               </div>
               <div className="mt-5 flex flex-wrap items-center gap-2">

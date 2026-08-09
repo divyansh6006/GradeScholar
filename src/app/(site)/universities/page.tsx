@@ -40,6 +40,7 @@ export default async function UniversitiesPage() {
                   width={u.logoWidth}
                   height={u.logoHeight}
                   className="max-h-14 w-auto object-contain"
+                  unoptimized
                 />
               </div>
               <span className="mt-5 inline-flex w-fit items-center rounded-full bg-gold-500/10 px-2.5 py-1 text-xs font-semibold text-gold-700">
